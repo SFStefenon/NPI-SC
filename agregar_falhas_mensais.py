@@ -1,3 +1,53 @@
+"""Soma as unidades interrompidas e calcula as médias de DEC/FEC por mês.
+
+As médias usam os registros originais do mês, agrupados por DATA INICIO.
+Meses sem registros entre o primeiro e o último mês recebem zero.
+DATA identifica cada mês pelo seu primeiro dia (AAAA-MM-01).
+"""
+import csv
+from collections import defaultdict
+from datetime import datetime
+from decimal import Decimal
+from pathlib import Path
+
+ENTRADA = Path(globals().get("ENTRADA", Path(__file__).with_name("DEC_DOC.csv")))
+SAIDA = Path(globals().get("SAIDA", Path(__file__).with_name("DEC_DOC_mensal.csv")))
+
+# Por mês: [soma de unidades interrompidas, soma DEC, soma FEC, registros].
+mensal = defaultdict(lambda: [0, Decimal("0"), Decimal("0"), 0])
+with ENTRADA.open("r", encoding="utf-8-sig", newline="") as f:
+    for linha in csv.DictReader(f, delimiter=";"):
+        data = datetime.strptime(linha["DATA INICIO"].strip(), "%d/%m/%Y %H:%M")
+        mes = data.date().replace(day=1)
+        valores = mensal[mes]
+        quantidade = linha["QTDE UC EQPTO INTERROMPIDA"].strip()
+        if quantidade:
+            valores[0] += int(quantidade)
+        valores[1] += Decimal(linha["DEC"].strip().replace(",", "."))
+        valores[2] += Decimal(linha["FEC"].strip().replace(",", "."))
+        valores[3] += 1
+
+if not mensal:
+    raise ValueError("O arquivo de entrada não contém registros.")
+
+mes, ultimo = min(mensal), max(mensal)
+with SAIDA.open("w", encoding="utf-8", newline="") as f:
+    escritor = csv.writer(f)
+    escritor.writerow(["DATA", "QTDE UC EQPTO INTERROMPIDA", "DEC", "FEC"])
+    while mes <= ultimo:
+        quantidade, dec, fec, n = mensal[mes]
+        escritor.writerow([
+            mes.isoformat(), quantidade,
+            f"{dec / n:.8f}" if n else "0",
+            f"{fec / n:.8f}" if n else "0",
+        ])
+        mes = mes.replace(year=mes.year + 1, month=1) if mes.month == 12 else mes.replace(month=mes.month + 1)
+
+print(f"Arquivo gerado: {SAIDA}")
+
+
+###############################################################################
+
 """Carrega DEC_DOC_diario.csv e produz um gráfico PDF com três séries temporais."""
 import csv
 from datetime import datetime
@@ -9,8 +59,8 @@ import numpy as np
 from matplotlib.ticker import FuncFormatter, MaxNLocator
 
 # Configuração
-CSV_PATH = Path(__file__).resolve().with_name("DEC_DOC_diario.csv")
-OUTPUT_PDF = Path(__file__).resolve().with_name("series_temporais_DEC_FEC.pdf")
+CSV_PATH = Path(__file__).resolve().with_name("DEC_DOC_mensal.csv")
+OUTPUT_PDF = Path(__file__).resolve().with_name("series_temporais_DEC_FEC_mensal.pdf")
 START_DATE = None          # Ex.: "2020-01-01" ou None
 END_DATE = None            # Ex.: "2025-12-31" ou None
 SMOOTH_DAYS = 30           # Média móvel causal, apenas dias anteriores e atual
