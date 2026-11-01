@@ -19,7 +19,7 @@ from statsmodels.tsa.seasonal import STL
 from statsmodels.tsa.stattools import acf
 
 ROOT = Path(__file__).resolve().parent
-INPUT = ROOT / "DEC_INMET_week.csv"
+INPUT = "./Pre-processed/DEC_INMET_week.csv"
 OUT = ROOT / "seasonality_study"
 OUT.mkdir(parents=True, exist_ok=True)
 TARGET = "QTDE UC EQPTO INTERROMPIDA"
