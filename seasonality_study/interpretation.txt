@@ -1,0 +1,8 @@
+SEASONALITY STUDY | QTDE UC EQPTO INTERROMPIDA
+Weeks: 520, from 2015-12-28 to 2025-12-08
+Weekly median: 5,999; maximum: 77,480
+52-week autocorrelation (raw): 0.072
+Robust STL seasonal strength (log1p, period 52): 0.169
+Friedman test, blocked by complete years 2016-2024: chi-square=11.547, p=0.399; Kendall W=0.117
+Interpretation: weak and inconsistent annual seasonality. Differences between calendar months are visible, but a repeatable month-of-year pattern is not supported by the year-blocked test. Large episodic spikes and changing annual patterns dominate. This is descriptive analysis, not a forecast.
+Rainfall should not be interpreted without checking HORAS_INMET_VALIDAS: a recorded zero may reflect an absence of measurements rather than no rain.
