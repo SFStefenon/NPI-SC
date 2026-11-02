@@ -1,0 +1,75 @@
+{
+  "data_file": "/Users/stefanostefenon/Downloads/DEC_INMET_week.csv",
+  "device": "cpu",
+  "seed_count": 50,
+  "mode": "complete",
+  "epochs_max": 100,
+  "epochs_min": 30,
+  "patience": 30,
+  "comparison_enabled": true,
+  "use_precipitation_single": false,
+  "use_seasonality_single": false,
+  "target_column": "QTDE UC EQPTO INTERROMPIDA",
+  "rain_column": "PRECIPITACAO_TOTAL_MM",
+  "lookback": 104,
+  "horizon": 1,
+  "train_fraction": 0.7,
+  "validation_fraction": 0.1,
+  "test_fraction": 0.2,
+  "train_end": 364,
+  "validation_end": 415,
+  "train_mean": 7910.1318359375,
+  "train_std": 7759.2666015625,
+  "rain_stats": {
+    "log1p_train_mean": 2.180149742745183,
+    "log1p_train_std": 1.420922693924238,
+    "valid_training_weeks": 277,
+    "missing_weeks_total": 145,
+    "uses_hours_coverage": true
+  },
+  "calendar_features": [
+    "annual_sin",
+    "annual_cos",
+    "month_sin",
+    "month_cos"
+  ],
+  "precipitation_timing": "historical-only, within lookback; no future observations",
+  "selection_rule": "lowest mean validation RMSE across variants",
+  "variants": [
+    {
+      "name": "target_only",
+      "rain": false,
+      "seasonality": false
+    },
+    {
+      "name": "precipitation_only",
+      "rain": true,
+      "seasonality": false
+    },
+    {
+      "name": "seasonality_only",
+      "rain": false,
+      "seasonality": true
+    },
+    {
+      "name": "precipitation_and_seasonality",
+      "rain": true,
+      "seasonality": true
+    }
+  ],
+  "architecture": {
+    "patch_size": 8,
+    "patch_stride": 8,
+    "d_model": 64,
+    "n_heads": 4,
+    "layers": 2,
+    "dropout": 0.1,
+    "mean_head": true,
+    "residual": false,
+    "final_layernorm": false,
+    "revin": false,
+    "moving_average_decomposition": false
+  },
+  "selected_variant": "precipitation_and_seasonality",
+  "selected_seed": 2
+}
