@@ -1,0 +1,14 @@
+Variant,Change_type,Module,Exact_change
+Position-Encoded RevIN Patch Transformer,Reference,All modules,"Reference: 13 non-overlapping 8-week patches, learned positions, pre-norm encoder and flattened 7-week head"
+Without RevIN,Removal,RevIN,Remove window normalization and inverse normalization
+RevIN without affine,Removal,RevIN affine,Keep RevIN but remove learned scale and shift
+Without patching,Removal,Patching,Use 104 individual weeks as tokens instead of 13 patches; head size and attention cost change
+Without position embeddings,Removal,Learned positions,Remove additive positions; the flattened head still keeps token locations distinct
+Without self-attention,Removal,Self-attention,"Remove attention in both encoder layers, retaining feed-forward blocks"
+Without feed-forward blocks,Removal,Feed-forward,Remove the GELU feed-forward sublayer in both encoder layers
+Without encoder residual skips,Removal,Encoder skips,Remove both residual additions in each encoder layer
+Without final LayerNorm,Removal,Final LayerNorm,Remove normalization after the last encoder layer
+Mean-pooled forecast head,Replacement,Forecast head,Replace flattened token-specific head with mean pooling and a 64-to-7 head
+Fixed sinusoidal positions,Replacement,Position encoding,Replace learned positions with fixed sinusoidal positions
+Overlapping patches (stride 4),Replacement,Patch stride,"Replace stride 8 with stride 4, making 25 overlapping patches"
+With moving-average decomposition,Addition,Trend branch,Separate a 25-step smoothed trend; encode the residual and add a learned trend forecast
