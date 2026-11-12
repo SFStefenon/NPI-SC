@@ -46,4 +46,4 @@ The preprocessing procedure removes duplicate hourly meteorological timestamps, 
 
 Missing meteorological measurements are retained as missing values rather than replaced with zeros. Observation-count columns provide information about the completeness of the meteorological records. Electrical variables are assigned zero for dates without corresponding records during daily reindexing.
 
-The resulting dataset is stored as [`DEC_INMET_day.csv`](https://example.com), containing **24 numerical variables and a daily date index**. It combines electricity distribution performance indicators with environmental measurements across multiple years, providing a historical record of network interruptions and meteorological variability.
+The resulting dataset is stored as [`DEC_INMET_day.csv`](https://github.com/SFStefenon/NPI-SC/blob/main/Data/Pre-processed/DEC_INMET_day.csv), containing **24 numerical variables and a daily date index**. It combines electricity distribution performance indicators with environmental measurements across multiple years, providing a historical record of network interruptions and meteorological variability.
